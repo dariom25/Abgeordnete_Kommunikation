@@ -1,0 +1,28 @@
+---
+title: "data_scraping"
+format: html
+editor: visual
+---
+
+## Load packages
+
+```{r}
+
+library("tidyverse")
+library("rvest")
+library("jsonlite")
+library("httr")
+
+```
+
+## Load data from Abgeordnetenwatch.de
+
+```{r}
+# get data from the niedersächsischer Landtag 19. Wahlperiode
+url <- "https://www.abgeordnetenwatch.de/api/v2/parliament-periods/143"
+
+data <- fromJSON(url)
+
+data$data
+
+```
