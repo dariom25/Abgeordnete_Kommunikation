@@ -15,14 +15,65 @@ library("httr")
 
 ```
 
-## Load data from Abgeordnetenwatch.de
+## Load infos of politicians from Abgeordnetenwatch.de
+
+This part will scrape the name, party and parliament from the website.
 
 ```{r}
-# get data from the niedersächsischer Landtag 19. Wahlperiode
-url <- "https://www.abgeordnetenwatch.de/api/v2/parliament-periods/143"
+# create vector with number of pages
+page_num <- c(0:137)
+  
+# starting url
+url <- "https://www.abgeordnetenwatch.de/profile?parliament_period=All&party=All&page="
 
-data <- fromJSON(url)
+politicians <- data.frame(
+  Name = character(),
+  Party = character(),
+  Parliament = character()
+)
+  
+for (i in page_num)  {
+  # create link for each page
+  updated_url <- paste(url, as.character(i), sep = "")
+  
+  # download the html of the given url
+  html <- read_html(updated_url)
+  
+  # get node which contains the name
+  node_name <- html_elements(html, ".tile__politician__name")
+  # init empty name vector to store names from for loop
+  names <- vector()
+  # extract name
+  for (i in 1:length(node_name)) {
+    name <- html_text(node_name[[i]])
+    names <- append(names, name)
+  }
 
-data$data
+  # get node which contains the party
+  node_party <- html_elements(html, ".tile__politician__party")
+  # init empty vector to store party from for loop
+  parties <- vector()
+  # extract name
+  for (i in 1:length(node_party)) {
+    party <- html_text(node_party[[i]])
+    parties <- append(parties, party)
+  }
+  
+  # get node which contains the parliament
+  node_parliament <- html_elements(html, ".tile__politician-detail__candidacy-mandate-label")
+  # init empty vector to store parliament from for loop
+  parliaments <- vector()
+  # extract name
+  for (i in 1:length(node_parliament)) {
+    parliament <- html_text(node_parliament[[i]])
+    parliament <- unlist(strsplit(parliament, " ", fixed = TRUE))[2]
+    parliaments <- append(parliaments, parliament)
+  }
+
+  politicians <- 
+}
+
 
 ```
+
+## Explore data
