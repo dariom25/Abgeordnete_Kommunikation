@@ -77,9 +77,10 @@ for (i in page_num)  {
   # extract link info and create full link
   for (i in 1:length(node_link)) {
     profile <- html_attr(node_link[[i]], "href")
-    link <- "https://www.abgeordnetenwatch.de/"
+    link_start <- "https://www.abgeordnetenwatch.de/"
+    link_end <- "/fragen-antworten?page=0"
     # add links together
-    link <- paste(link, profile, sep = "")
+    link <- paste(link_start, profile, link_end, sep = "")
     
     links <- append(links, link)
   }
