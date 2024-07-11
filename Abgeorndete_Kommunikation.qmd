@@ -21,7 +21,7 @@ This part will scrape the name, party and parliament from the website.
 
 ```{r}
 # create vector with number of pages
-page_num <- c(0:137)
+page_num <- c(0:136)
   
 # starting url
 url <- "https://www.abgeordnetenwatch.de/profile?parliament_period=All&party=All&page="
@@ -29,7 +29,8 @@ url <- "https://www.abgeordnetenwatch.de/profile?parliament_period=All&party=All
 politicians <- data.frame(
   Name = character(),
   Party = character(),
-  Parliament = character()
+  Parliament = character(),
+  Profile_link = character()
 )
   
 for (i in page_num)  {
@@ -44,8 +45,8 @@ for (i in page_num)  {
   # init empty name vector to store names from for loop
   names <- vector()
   # extract name
-  for (i in 1:length(node_name)) {
-    name <- html_text(node_name[[i]])
+  for (e in 1:length(node_name)) {
+    name <- html_text(node_name[[e]])
     names <- append(names, name)
   }
 
@@ -53,27 +54,40 @@ for (i in page_num)  {
   node_party <- html_elements(html, ".tile__politician__party")
   # init empty vector to store party from for loop
   parties <- vector()
-  # extract name
-  for (i in 1:length(node_party)) {
-    party <- html_text(node_party[[i]])
+  # extract party
+  for (e in 1:length(node_party)) {
+    party <- html_text(node_party[[e]])
     parties <- append(parties, party)
   }
   
-  # get node which contains the parliament
-  node_parliament <- html_elements(html, ".tile__politician-detail__candidacy-mandate-label")
+    # get node which contains the parliament
+  node_parliament <- html_elements(html, "div.tile__politician-detail__candidacy-mandate:first-child > .tile__politician-detail__candidacy-mandate-label")
   # init empty vector to store parliament from for loop
   parliaments <- vector()
-  # extract name
+  # extract parliament
   for (i in 1:length(node_parliament)) {
     parliament <- html_text(node_parliament[[i]])
+    # remove 'abegordnete:r'
     parliament <- unlist(strsplit(parliament, " ", fixed = TRUE))[2]
     parliaments <- append(parliaments, parliament)
   }
-
-  politicians <- 
+  
+  # init empty vector
+  links <- vector()
+  # get nodes from html containig links
+  node_link <- html_elements(html, ".link-gray")
+  
+  # extract link info and create full link
+  for (i in 1:length(node_link)) {
+    profile <- html_attr(node_link[[i]], "href")
+    link <- "https://www.abgeordnetenwatch.de/"
+    # add links together
+    link <- paste(link, profile, sep = "")
+    
+    links <- append(links, link)
+  }
+  
+  # add data into dataframe
+  politicians <- rbind(politicians, list(names, parties, parliaments, links))
 }
-
-
 ```
-
-## Explore data
