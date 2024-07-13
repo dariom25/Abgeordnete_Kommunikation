@@ -4,4 +4,37 @@ format: html
 editor: visual
 ---
 
-## 
+```{r}
+library(tidyverse)
+library(stringr)
+library(rvest)
+politicians <- read.csv("C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v2.csv", header = TRUE, stringsAsFactors = FALSE)
+```
+
+## Profile pages
+
+This script will scrape the profile pages of the Abgeordneten for information about their ID, the qustions asked, answered questions, the tags of the question, the number of asked questions, the number of answered questions
+
+```{r}
+profile_urls <- politicians$Profile
+
+html <- read_html(profile_urls[1])
+
+# extract nodes + split text of node
+question_stats <- html_elements(html, "div > span.stats__digit") %>%
+  html_text() %>%
+  str_split("/")
+
+# convert text to numeric
+questions_answered <- question_stats[[1]][2] %>%
+  substr(2, nchar(.)) %>%
+  as.numeric()
+
+# convert text to numeric
+questions_asked <- question_stats[[1]][1] %>%
+  substr(1, nchar(.)-1) %>%
+  as.numeric()
+
+# append information to dataframe
+
+```
