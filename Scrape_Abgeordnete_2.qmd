@@ -18,23 +18,38 @@ This script will scrape the profile pages of the Abgeordneten for information ab
 ```{r}
 profile_urls <- politicians$Profile
 
-html <- read_html(profile_urls[1])
+#data <- data.frame(ID = numeric(), No_of_answers = numeric(), No_of_questions = numeric())
 
-# extract nodes + split text of node
-question_stats <- html_elements(html, "div > span.stats__digit") %>%
-  html_text() %>%
-  str_split("/")
+for (i in 2259:2722) {  
+  
+  html <- read_html(profile_urls[i])
+  
+  # extract stats to questions
+  question_stats <- html_elements(html, "div > span.stats__digit") %>%
+    html_text() %>%
+    str_split("/")
+  
+  # convert text to numeric
+  questions_answered <- question_stats[[1]][2] %>%
+    substr(2, nchar(.)) %>%
+    as.numeric()
 
-# convert text to numeric
-questions_answered <- question_stats[[1]][2] %>%
-  substr(2, nchar(.)) %>%
-  as.numeric()
+  # convert text to numeric
+  questions_asked <- question_stats[[1]][1] %>%
+    substr(1, nchar(.)-1) %>%
+    as.numeric()
 
-# convert text to numeric
-questions_asked <- question_stats[[1]][1] %>%
-  substr(1, nchar(.)-1) %>%
-  as.numeric()
+  # extract politician ID 
+  id <- html_element(html, "div.api-link > a") %>%
+    html_attr("href") %>%
+    str_split("/open-data/info/politician/") 
+  id <- as.numeric(id[[1]][2])
 
-# append information to dataframe
+  data <- rbind(data, list(id, questions_answered, questions_asked))
+}
 
+```
+
+```{r}
+write_csv(politicians, "C:\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v3.csv")
 ```
