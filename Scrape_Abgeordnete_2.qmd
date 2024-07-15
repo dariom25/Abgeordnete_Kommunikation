@@ -18,9 +18,9 @@ This script will scrape the profile pages of the Abgeordneten for information ab
 ```{r}
 profile_urls <- politicians$Profile
 
-#data <- data.frame(ID = numeric(), No_of_answers = numeric(), No_of_questions = numeric())
+data <- data.frame(ID = numeric(), No_of_answers = numeric(), No_of_questions = numeric())
 
-for (i in 2259:2722) {  
+for (i in 1:length(profile_urls)) {  
   
   html <- read_html(profile_urls[i])
   
@@ -44,12 +44,17 @@ for (i in 2259:2722) {
     html_attr("href") %>%
     str_split("/open-data/info/politician/") 
   id <- as.numeric(id[[1]][2])
-
+  
+  # add data to dataframe
   data <- rbind(data, list(id, questions_answered, questions_asked))
 }
 
 ```
 
 ```{r}
+# combine dataframes + export as csv
+politicians <- list(politicians, data) %>%
+  reduce(full_join, by="variable_name")
+
 write_csv(politicians, "C:\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v3.csv")
 ```
