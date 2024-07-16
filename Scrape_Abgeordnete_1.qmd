@@ -16,6 +16,12 @@ library("tidyverse")
 
 This part will scrape the name, party and parliament from the website.
 
+Known issues:
+
+-   Some politicians will appear multiple times in the dataframe even though they are in just one parliament
+
+-   Some links to the questions and answers are broken, because the links of the profile and the questions and answers do not have the same base structure
+
 ```{r}
 # create vector with number of pages
 page_num <- c(0:136)
