@@ -20,7 +20,7 @@ profile_urls <- politicians$Profile
 
 data <- data.frame(ID = numeric(), No_of_answers = numeric(), No_of_questions = numeric())
 
-for (i in 1:length(profile_urls)) {  
+for (i in 55:length(profile_urls)) {  
   
   html <- read_html(profile_urls[i])
   
@@ -28,7 +28,7 @@ for (i in 1:length(profile_urls)) {
   question_stats <- html_elements(html, "div > span.stats__digit") %>%
     html_text() %>%
     str_split("/")
-  
+
   # convert text to numeric
   questions_answered <- question_stats[[1]][2] %>%
     substr(2, nchar(.)) %>%
