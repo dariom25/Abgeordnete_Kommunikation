@@ -8,19 +8,19 @@ editor: visual
 library(tidyverse)
 library(stringr)
 library(rvest)
-politicians <- read.csv("C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v2.csv", header = TRUE, stringsAsFactors = FALSE)
+politicians <- read.csv("C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v2.1.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
 ```
 
 ## Profile pages
 
-This script will scrape the profile pages of the Abgeordneten for information about their ID, the qustions asked, answered questions, the tags of the question, the number of asked questions, the number of answered questions
+This script will scrape the profile pages of the Abgeordneten for information about their Abgeordnetenwatch-ID, the number of asked questions, the number of answered questions
 
 ```{r}
 profile_urls <- politicians$Profile
 
 data <- data.frame(ID = numeric(), No_of_answers = numeric(), No_of_questions = numeric())
 
-for (i in 55:length(profile_urls)) {  
+for (i in 1:length(profile_urls)) {  
   
   html <- read_html(profile_urls[i])
   
@@ -48,13 +48,18 @@ for (i in 55:length(profile_urls)) {
   # add data to dataframe
   data <- rbind(data, list(id, questions_answered, questions_asked))
 }
-
 ```
 
 ```{r}
 # combine dataframes + export as csv
-politicians <- list(politicians, data) %>%
-  reduce(full_join, by="variable_name")
+politicians_1 <- cbind(politicians, data)
 
-write_csv(politicians, "C:\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v3.csv")
+# correctly name the columns
+names(politicians_1) <- c("Name", "Party", "Parliament", "Q_A_Link", "ID", "Q_asked", "Q_answered")
+
+# remove double entries from dataframe
+politicians_2 <- unique(politicians_1)
+
+# export dataframe
+write.csv(politicians_2, "C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v3.csv", row.names = FALSE)
 ```
