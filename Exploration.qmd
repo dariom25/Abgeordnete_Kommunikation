@@ -8,12 +8,12 @@ editor: visual
 
 ```{r}
 library(tidyverse)
-politicians <- read.csv("C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v3.csv", header = TRUE, stringsAsFactors = FALSE)
+politicians <- read.csv("politicians_v3.csv", header = TRUE, stringsAsFactors = FALSE)
 ```
 
 ## All questions vs. all answers
 
-This plot shows the questions-to-answer rate of all questions and answer from the elected politician from 17.07.2024 in Germany.
+This plot shows the questions-to-answer rate of all questions and answer from the elected politician from 17.07.2024 in Germany. About two thirds of the questions asked have been answered.
 
 ```{r}
 answers <- sum(politicians$Q_answered)
@@ -31,6 +31,30 @@ ggplot(data = data, aes(x ="", y = stats, fill = category)) +
   ggtitle(paste("Number of total questions:", questions))
 ```
 
-About two thirds of the questions asked have been answered.
+## Questions and Answers in relation to their party
 
-## 
+This code chunk will create a function, displaying a pie chart of given party. It takes the name of the party as string and color codes for the answered and unanswered questions as optional parameters.
+
+```{r}
+party_pie_chart <- function(party, color_a = "#87BCDE", color_u = "#805E73") {
+  # filter data
+  filtered_data <- filter(politicians, Party == party)
+  print(filtered_data)
+  answers <- sum(filtered_data$Q_answered)
+  questions <- sum(filtered_data$Q_asked)
+  
+  # create data frame with data
+  data <- data.frame(
+    "stats" = c(round((questions-answers)/questions*100, 2), round(answers/questions*100, 2)), 
+  "category" = c("Unanswered", "Answered"))
+  
+  # create pie chart
+  ggplot(data = data, aes(x ="", y = stats, fill = category)) + 
+  geom_col(color = "black") +
+  geom_text(aes(label = paste0(stats, "%")), position = position_stack(vjust = 0.5))+
+  coord_polar(theta = "y") +
+  theme_void() +
+  scale_fill_manual(values = c(color_a, color_u)) +
+  ggtitle(paste("Total questions:", questions, "- Party:", party))
+}
+```
