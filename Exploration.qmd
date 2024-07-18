@@ -58,3 +58,45 @@ party_pie_chart <- function(party, color_a = "#87BCDE", color_u = "#805E73") {
   ggtitle(paste("Total questions:", questions, "- Party:", party))
 }
 ```
+
+This plot shows the answered-unanswered-question-ratio of the CDU. The CDU has been asked 4410 questions and 35% of the questions have not been answered.
+
+```{r}
+party_pie_chart(" CDU")
+```
+
+This plot shows the answered-unanswered-question-ratio of the CDU. The CDU has been asked 814 questions and 23% of the questions have not been answered
+
+```{r}
+party_pie_chart(" CSU")
+```
+
+This plot shows the answered-unanswered-question-ratio of the FDP. The FDP has been asked 6019 questions and 27% have not been answered.
+
+```{r}
+party_pie_chart(" FDP")
+```
+
+This plot shows the answered-unanswered-question-ratio of the SPD. The SPD has been asked 11970 questions and 19% have not been answered.
+
+```{r}
+party_pie_chart(" SPD")
+```
+
+This plot shows the answered-unanswered-question-ratio of the Bündnis 90/Die Grünen. The Bündnis 90/Die Grünen has been asked 9495 questions and 28% have not been answered.
+
+```{r}
+party_pie_chart(" Bündnis 90/Die Grünen")
+```
+
+This plot shows the answered-unanswered-question-ratio of the AfD. The AfD has been asked 2038 questions and 24% have not been answered.
+
+```{r}
+party_pie_chart(" AfD")
+```
+
+This plot shows the answered-unanswered-question-ratio of the DIE LINKE. The DIE LINKE has been asked 1704 questions and 12% have not been answered.
+
+```{r}
+party_pie_chart(" DIE LINKE")
+```
