@@ -1,0 +1,36 @@
+---
+title: "Exploration"
+format: html
+editor: visual
+---
+
+## Exploration of data
+
+```{r}
+library(tidyverse)
+politicians <- read.csv("C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v3.csv", header = TRUE, stringsAsFactors = FALSE)
+```
+
+## All questions vs. all answers
+
+This plot shows the questions-to-answer rate of all questions and answer from the elected politician from 17.07.2024 in Germany.
+
+```{r}
+answers <- sum(politicians$Q_answered)
+questions <- sum(politicians$Q_asked)
+data <- data.frame(
+  "stats" = c(round((questions-answers)/questions*100, 2), round(answers/questions*100, 2)), 
+  "category" = c("Unanswered", "Answered"))
+
+ggplot(data = data, aes(x ="", y = stats, fill = category)) + 
+  geom_col(color = "black") +
+  geom_text(aes(label = paste0(stats, "%")), position = position_stack(vjust = 0.5))+
+  coord_polar(theta = "y") +
+  theme_void() +
+  scale_fill_manual(values = c("#87BCDE", "#805E73")) +
+  ggtitle(paste("Number of total questions:", questions))
+```
+
+About two thirds of the questions asked have been answered.
+
+## 
