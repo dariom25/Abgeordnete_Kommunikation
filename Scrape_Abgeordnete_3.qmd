@@ -1,0 +1,53 @@
+---
+title: "Scrape_Abgeordnete_Questions"
+format: revealjs
+editor: visual
+---
+
+# Questions to Abgeordnete
+
+In this script questions and meta-information like date, tag, parliament etc. will be scraped and added to the main dataset.
+
+## Load packages and data
+
+```{r}
+library(tidyverse)
+library(rvest)
+politicians <- read.csv("politicians_v3.csv")
+```
+
+## Script to scrape questions and meta-infos
+
+```{r}
+profiles <- politicians$Q_A_Link
+
+questions_meta_data <- data.frame(
+  Date_q = character(),
+  Question_text = character(),
+  Question_teaser = character(),
+  Question_num = numeric(),
+  Answer_text = character(),
+  Answer_num = numeric(),
+  qID = character(),
+  Issue = character(),
+  Parliament = character()
+)
+
+for (i in 1:length(profiles)) {
+  html <- read_html(profiles[i])
+  
+  # extract date of question
+  date_q <- html_element(html, "div.tile__politician__info > span.tile__politician__label") %>%
+    html_text() %>%
+    str_split("•")
+  date_q <- date_q[[1]][2]
+  
+  ## error: hier muss erst noch auf die Seite von der Frage gegangen werden lol 
+  # extract text of question
+  text_q <- html_element(html, "div.title__question__text")
+  
+  print(text_q)
+}
+
+
+```
