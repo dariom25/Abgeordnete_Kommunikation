@@ -60,6 +60,9 @@ names(politicians_1) <- c("Name", "Party", "Parliament", "Q_A_Link", "ID", "Q_as
 # remove double entries from dataframe
 politicians_2 <- unique(politicians_1)
 
+# remove leading whitespace
+politicians_2$Party <- trimws(pol$Party, "l")
+
 # export dataframe
 write.csv(politicians_2, "C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v3.csv", row.names = FALSE)
 ```
