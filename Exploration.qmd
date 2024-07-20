@@ -31,7 +31,7 @@ ggplot(data = data, aes(x ="", y = stats, fill = category)) +
   ggtitle(paste("Number of total questions:", questions))
 ```
 
-## Questions and Answers in relation to their party
+## Questions and Answers in relation to the party
 
 This code chunk will create a function, displaying a pie chart of given party. It takes the name of the party as string and color codes for the answered and unanswered questions as optional parameters.
 
@@ -62,41 +62,49 @@ party_pie_chart <- function(party, color_a = "#87BCDE", color_u = "#805E73") {
 This plot shows the answered-unanswered-question-ratio of the CDU. The CDU has been asked 4410 questions and 35% of the questions have not been answered.
 
 ```{r}
-party_pie_chart(" CDU")
+party_pie_chart("CDU")
 ```
 
 This plot shows the answered-unanswered-question-ratio of the CDU. The CDU has been asked 814 questions and 23% of the questions have not been answered
 
 ```{r}
-party_pie_chart(" CSU")
+party_pie_chart("CSU")
 ```
 
 This plot shows the answered-unanswered-question-ratio of the FDP. The FDP has been asked 6019 questions and 27% have not been answered.
 
 ```{r}
-party_pie_chart(" FDP")
+party_pie_chart("FDP")
 ```
 
 This plot shows the answered-unanswered-question-ratio of the SPD. The SPD has been asked 11970 questions and 19% have not been answered.
 
 ```{r}
-party_pie_chart(" SPD")
+party_pie_chart("SPD")
 ```
 
 This plot shows the answered-unanswered-question-ratio of the Bündnis 90/Die Grünen. The Bündnis 90/Die Grünen has been asked 9495 questions and 28% have not been answered.
 
 ```{r}
-party_pie_chart(" Bündnis 90/Die Grünen")
+party_pie_chart("Bündnis 90/Die Grünen")
 ```
 
 This plot shows the answered-unanswered-question-ratio of the AfD. The AfD has been asked 2038 questions and 24% have not been answered.
 
 ```{r}
-party_pie_chart(" AfD")
+party_pie_chart("AfD")
 ```
 
 This plot shows the answered-unanswered-question-ratio of the DIE LINKE. The DIE LINKE has been asked 1704 questions and 12% have not been answered.
 
 ```{r}
-party_pie_chart(" DIE LINKE")
+party_pie_chart("DIE LINKE")
+```
+
+## Unanswered question with all parties in relation
+
+```{r}
+parties = c("SPD", "Bündnis 90/Die Grünen", "FDP", "CDU", "AfD", "DIE LINKE", "CSU")
+
+
 ```
