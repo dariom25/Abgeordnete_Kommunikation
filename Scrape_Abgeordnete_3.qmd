@@ -25,7 +25,8 @@ questions_meta_data <- data.frame(
   Date_q = character(),
   Question_text = character(),
   Question_teaser = character(),
-  Question_num = numeric(),
+  Question_link = character(),
+  #Question_num = numeric(),
   Answer_text = character(),
   Answer_num = numeric(),
   qID = character(),
@@ -33,21 +34,31 @@ questions_meta_data <- data.frame(
   Parliament = character()
 )
 
-for (i in 1:length(profiles)) {
-  html <- read_html(profiles[i])
-  
-  # extract date of question
-  date_q <- html_element(html, "div.tile__politician__info > span.tile__politician__label") %>%
-    html_text() %>%
-    str_split("•")
-  date_q <- date_q[[1]][2]
-  
-  ## error: hier muss erst noch auf die Seite von der Frage gegangen werden lol 
-  # extract text of question
-  text_q <- html_element(html, "div.title__question__text")
-  
-  print(text_q)
-}
+
+html <- read_html(profiles[1])
+
+# extract date of questions
+date_q <- html_elements(html, "div > div.tile__entry:first-child > div > div.tile__politician__info > span.tile__politician__label") %>%
+  html_text()  %>%
+  str_split("•") 
+date_q <- c(date_q[[1]][2],date_q[[2]][2], date_q[[3]][2], date_q[[4]][2], date_q[[5]][2], date_q[[6]][2]) %>%
+  trimws("l")
+
+# extract teaser of questions as list
+teaser_q <- html_elements(html, "div.tile__question__teaser > a") %>%
+  html_text()
+
+# extract link from question teasers as list
+link_q <- html_elements(html, "div.tile__question__teaser > a") %>%
+  html_attr("href")
+
+# extract teaser of answers as list
+teaser_a <- html_elements(html, "div.tile__answer__summary > p") %>%
+  html_text()
+
+# generate unique id for each question
+qID <- # create unique id
+
 
 
 ```
