@@ -16,6 +16,9 @@ politicians <- read.csv("C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\
 This script will scrape the profile pages of the Abgeordneten for information about their Abgeordnetenwatch-ID, the number of asked questions, the number of answered questions
 
 ```{r}
+# remove double entries from dataframe
+politicians <- unique(politicians)
+
 profile_urls <- politicians$Profile
 
 data <- data.frame(
@@ -63,16 +66,13 @@ for (i in 1:length(profile_urls)) {
 
 ```{r}
 # combine dataframes + export as csv
-politicians_1 <- cbind(politicians, data)
+politicians <- cbind(politicians, data)
 
 # correctly name the columns
-names(politicians_1) <- c("Name", "Party", "Parliament", "Q_A_Link", "ID", "Q_asked", "Q_answered")
-
-# remove double entries from dataframe
-politicians_2 <- unique(politicians_1)
+names(politicians) <- c("Name", "Party", "Parliament", "Q_A_Link", "ID", "Q_asked", "Q_answered")
 
 # remove leading whitespace
-politicians_2$Party <- trimws(pol$Party, "l")
+politicians$Party <- trimws(politicians$Party, "l")
 
 # export dataframe
 write.csv(politicians_2, "C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v3.csv", row.names = FALSE)
