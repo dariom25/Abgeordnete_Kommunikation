@@ -69,11 +69,11 @@ for (i in 1:length(profile_urls)) {
 politicians <- cbind(politicians, data)
 
 # correctly name the columns
-names(politicians) <- c("Name", "Party", "Parliament", "Q_A_Link", "ID", "Q_asked", "Q_answered")
+names(politicians) <- c("Name", "Party", "Parliament", "Q_A_Link", "ID", "Q_asked", "Q_answered", "No_of_Q_pages")
 
 # remove leading whitespace
 politicians$Party <- trimws(politicians$Party, "l")
 
 # export dataframe
-write.csv(politicians_2, "C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v3.csv", row.names = FALSE)
+write.csv(politicians, "C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v3.csv", row.names = FALSE)
 ```
