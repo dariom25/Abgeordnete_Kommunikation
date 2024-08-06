@@ -14,101 +14,121 @@ In this script questions and meta-information like date, tag, parliament etc. wi
 library(tidyverse)
 library(rvest)
 library(uuid)
-politicians <- read.csv("politicians_v3.csv", sep = ";")
+politicians <- read.csv("politicians_v5.csv")
 ```
 
 ## Script to scrape questions and meta-infos
 
 ```{r}
 
-## TODO: Es muss noch über die einzelnen Politiker iteriert werden
-
 profiles <- politicians$Q_A_Link
 no_of_q_pages <- politicians$No_of_Q_pages
+list_of_question_and_answers <- vector() 
 
-questions_meta_data <- data.frame(
-  Date_q = character(),
-  Question_text = character(),
-  Question_teaser = character(),
-  Answer_text = character(),
-  qID = character(),
-  Topic = character(),
-  Parliament = character()
-)
-
-for (i in 0:no_of_q_pages[1]) {
-  profiles <- str_replace(profiles, "\\d{1,3}", as.character(i))
+for (p in 685:length(profiles)) {
+  questions_meta_data <- data.frame(
+    Date_q = character(),
+    Question_text = character(),
+    Question_teaser = character(),
+    Answer_text = character(),
+    qID = character(),
+    Topic = character(),
+    Parliament = character()
+  )
   
-  html <- read_html(profiles[1]) # das muss später ggf. noch geändert werden
-  
-  # extract link from question teasers as list
-  link_q <- html_elements(html, "div.tile__question__teaser > a") %>%
-    html_attr("href")
-  
-  # set link pieces together
-  question_page <- paste("https://www.abgeordnetenwatch.de", link_q, sep = "")
-  
-  dates_of_q <- vector()
-  question_text <- vector()
-  answer_text <- vector()
-  topics <- vector()
-  parliaments <- vector()
-  qID <- vector()
-  teaser_q <- vector()
-
-  
-  for (e in 1:length(question_page)) {
-    # scrape question and answer from the question page
-    question_html <- read_html(question_page[e])
+  for (i in 1:no_of_q_pages[p]) {
+    profiles <- str_replace(profiles, "(?<=\\/)\\d{1,3}", as.character(i))
     
-    # extract teaser of questions as list
-    teaser_qu <- html_element(question_html, "h1.tile__question__teaser") %>%
+    html <- read_html(profiles[p])
+    
+    # extract link from question teasers as list
+    link_q <- html_elements(html, "div.tile__question__teaser > a") %>%
+      html_attr("href")
+    
+    # set link pieces together
+    question_page <- paste("https://www.abgeordnetenwatch.de", link_q, sep = "")
+    
+    dates_of_q <- vector()
+    question_text <- vector()
+    answer_text <- vector()
+    topics <- vector()
+    parliaments <- vector()
+    qID <- vector()
+    teaser_q <- vector()
+    
+    for (e in 1:length(question_page)) {
+      # scrape question and answer from the question page
+      question_html <- read_html(question_page[e])
+      
+      # extract teaser of questions as list
+      teaser_qu <- html_element(question_html, "h1.tile__question__teaser") %>%
+        html_text()
+      teaser_q <- append(teaser_q, teaser_qu)
+      
+      # create unique ID for question
+      qID <- append(qID, UUIDgenerate())
+      
+      # extract the question text
+      text_q <- html_elements(question_html, "div.tile__question-text > div") %>%
+        html_text()
+      # if text_q has 0 characters the teaser is the question
+      if (length(text_q) == 0) {
+        text_q <- NA
+      } else if (length(text_q) > 1) {
+        text_q <- text_q[1]
+      }
+
+      question_text <- append(question_text, text_q)
+    
+      
+      # extract the answer text
+      text_a <- html_elements(question_html, "div.question-answer__text > div") %>%
+        html_text()
+      # fallback if no answer exists
+      if (length(text_a) == 0) {
+        text_a <- NA
+      } else if (length(text_a) > 1) {
+        text_a <- paste(text_a[1], text_a[2], sep = " ")
+      }
+      
+      answer_text <- append(answer_text, text_a)
+    
+       # extract date of questions
+      date_q <- html_element(question_html, "div > div.tile__politician__info > span.tile__politician__label") %>%
+        html_text() %>%
+        str_extract("\\d{1,2}\\.\\d{1,2}\\.\\d{4}")
+      
+      dates_of_q <- append(dates_of_q, date_q)
+      
+      # extract topic 
+      topic <- html_element(question_html, "div > ul.list-inline > li:last-child > a") %>%
+        html_text()
+      topics <- append(topics, topic)
+    
+    # extract parliament where question was posed
+    parliament <- html_element(question_html, "div > ul.list-inline > li:first-child > a") %>%
       html_text()
-    teaser_q <- append(teaser_q, teaser_qu)
-    
-    # create unique ID for question
-    qID <- append(qID, UUIDgenerate())
-    
-    # extract the question text
-    text_q <- html_elements(question_html, "div.tile__question-text > div") %>%
-      html_text()
-    # if text_q has 0 characters the teaser is the question
-    if (length(text_q) == 0) {
-      text_q <- NA
+    parliaments <- append(parliaments, parliament)
     }
     
-    question_text <- append(question_text, text_q)
+    # transform data from vectors to dataframe
+    questions_meta_data <- rbind(questions_meta_data, list(dates_of_q, question_text, teaser_q, answer_text, qID, topics, parliaments))
   
-    
-    # extract the answer text
-    text_a <- html_elements(question_html, "div.question-answer__text > div") %>%
-      html_text()
-    # fallback if no answer exists
-    if (length(text_a) == 0) {
-      text_a <- NA
-    }
-    
-    answer_text <- append(answer_text, text_a)
-  
-     # extract date of questions
-    date_q <- html_element(question_html, "div > div.tile__politician__info > span.tile__politician__label") %>%
-      html_text() %>%
-      str_extract("\\d{1,2}\\.\\d{1,2}\\.\\d{4}")
-    
-    dates_of_q <- append(dates_of_q, date_q)
-    
-    # extract topic 
-    topic <- html_element(question_html, "div > ul.list-inline > li:last-child > a") %>%
-      html_text()
-    topics <- append(topics, topic)
-  
-  # extract parliament where question was posed
-  parliament <- html_element(question_html, "div > ul.list-inline > li:first-child > a") %>%
-    html_text()
-  parliaments <- append(parliaments, parliament)
   }
-
-  questions_meta_data <- rbind(questions_meta_data, list(dates_of_q, question_text, teaser_q, answer_text, qID, topics, parliaments))
+  # correctly name the columns
+  names(questions_meta_data) <- c("Date of Question", "Question", "Teaser of Question", "Answer", "Question ID", "Topic", "Parliament")
+  
+  # append dataframe to list
+  list_of_question_and_answers <- c(list_of_question_and_answers, list(questions_meta_data))
 
 }
+```
+
+```{r}
+
+library(jsonlite)
+
+qa_json <- toJSON(list_of_question_and_answers)
+
+write(qa_json, file = "C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\qa_json1685.json")
 ```
