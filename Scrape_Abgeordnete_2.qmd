@@ -74,6 +74,9 @@ names(politicians) <- c("Name", "Party", "Parliament", "Q_A_Link", "ID", "Q_aske
 # remove leading whitespace
 politicians$Party <- trimws(politicians$Party, "l")
 
+# set missing values or 6 or less answers to the page number 0 so it is iterable
+politicians$No_of_Q_pages[is.na(politicians$No_of_Q_pages)] <- 0
+
 # export dataframe
-write.csv(politicians, "C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v3.csv", row.names = FALSE)
+write.csv(politicians, "C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v5.csv", row.names = FALSE)
 ```
