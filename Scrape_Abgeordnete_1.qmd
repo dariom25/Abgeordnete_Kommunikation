@@ -95,3 +95,10 @@ for (i in page_num)  {
   politicians <- rbind(politicians, list(names, parties, parliaments, links))
 }
 ```
+
+## Export scraped data
+
+```{r}
+# export the politicians as csv
+write.csv(politicians, "C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_1.csv", row.names = FALSE)
+```
