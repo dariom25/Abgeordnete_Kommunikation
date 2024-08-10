@@ -8,7 +8,7 @@ editor: visual
 library(tidyverse)
 library(stringr)
 library(rvest)
-politicians <- read.csv("C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v2.1.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
+politicians <- read.csv("C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v1.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
 ```
 
 ## Profile pages
