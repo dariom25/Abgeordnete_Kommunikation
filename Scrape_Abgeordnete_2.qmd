@@ -64,6 +64,8 @@ for (i in 1:length(profile_urls)) {
 }
 ```
 
+## Clean and export data
+
 ```{r}
 # combine dataframes + export as csv
 politicians <- cbind(politicians, data)
@@ -78,5 +80,5 @@ politicians$Party <- trimws(politicians$Party, "l")
 politicians$No_of_Q_pages[is.na(politicians$No_of_Q_pages)] <- 0
 
 # export dataframe
-write.csv(politicians, "C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v5.csv", row.names = FALSE)
+write.csv(politicians, "C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_2.csv", row.names = FALSE)
 ```
