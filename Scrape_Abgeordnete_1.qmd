@@ -23,8 +23,14 @@ Known issues:
 -   Some links to the questions and answers are broken, because the links of the profile and the questions and answers do not have the same base structure
 
 ```{r}
-# create vector with number of pages
-page_num <- c(0:136)
+# get number of pages
+html <- read_html("https://www.abgeordnetenwatch.de/profile?parliament_period=All&party=All&page=0")
+page <- html_element(html, "div.l-grid__col > nav ul > li:last-child > a") %>%
+    html_attr("href") %>%
+    str_split("=")
+page <- as.numeric(page[[1]][4])
+   
+page_num <- c(0:page)
   
 # starting url
 url <- "https://www.abgeordnetenwatch.de/profile?parliament_period=All&party=All&page="
