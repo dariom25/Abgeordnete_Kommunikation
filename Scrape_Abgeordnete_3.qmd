@@ -133,5 +133,5 @@ politicians$QA_Information <- list_of_question_and_answers
 
 # export data as json because of how the data is now structured
 politicians_json <- toJSON(politicians, pretty = TRUE)
-write(json_data, file = "abgeordnetenwatch_data.json")
+write(politicians_json, file = "abgeordnetenwatch_data.json")
 ```
