@@ -10,7 +10,7 @@ library(stringr)
 library(rvest)
 
 # replace the file path with your path and maybe adjust the seperator
-politicians <- read.csv("Your\\file\\path\\politicians_v1.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
+politicians <- read.csv("politicians_v1.csv")
 ```
 
 ## Profile pages
@@ -83,5 +83,5 @@ politicians$No_of_Q_pages[is.na(politicians$No_of_Q_pages)] <- 0
 
 # export dataframe
 # replace the path with your file path
-write.csv(politicians, "Your\\file\\path\\politicians_2.csv", row.names = FALSE)
+write.csv(politicians, "politicians_2.csv", row.names = FALSE)
 ```
