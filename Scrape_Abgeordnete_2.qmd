@@ -82,5 +82,6 @@ politicians$Party <- trimws(politicians$Party, "l")
 politicians$No_of_Q_pages[is.na(politicians$No_of_Q_pages)] <- 0
 
 # export dataframe
-write.csv(politicians, "C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_2.csv", row.names = FALSE)
+# replace the path with your file path
+write.csv(politicians, "Your\\file\\path\\politicians_2.csv", row.names = FALSE)
 ```
