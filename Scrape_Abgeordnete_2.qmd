@@ -8,7 +8,9 @@ editor: visual
 library(tidyverse)
 library(stringr)
 library(rvest)
-politicians <- read.csv("C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\politicians_v1.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
+
+# replace the file path with your path and maybe adjust the seperator
+politicians <- read.csv("Your\\file\\path\\politicians_v1.csv", header = TRUE, stringsAsFactors = FALSE, sep = ";")
 ```
 
 ## Profile pages
