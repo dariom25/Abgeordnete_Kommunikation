@@ -116,7 +116,7 @@ for (p in 1:length(profiles)) {
   
   }
   # correctly name the columns
-  names(questions_meta_data) <- c("Date of Question", "Question", "Teaser of Question", "Answer", "Question ID", "Topic", "Parliament")
+  names(questions_meta_data) <- c("Date_of_Question", "Question", "Teaser_of_Question", "Answer", "Question_ID", "Topic", "Parliament")
   
   # append dataframe to list
   list_of_question_and_answers <- c(list_of_question_and_answers, list(questions_meta_data))
@@ -130,7 +130,9 @@ for (p in 1:length(profiles)) {
 
 # add scraped data to existing data as new column
 politicians$QA_Information <- list_of_question_and_answers
+```
 
+```{r}
 # export data as json because of how the data is now structured
 politicians_json <- toJSON(politicians, pretty = TRUE)
 write(politicians_json, file = "abgeordnetenwatch_data.json")
