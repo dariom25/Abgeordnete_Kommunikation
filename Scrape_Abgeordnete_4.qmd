@@ -64,6 +64,12 @@ politicians$Residence <- residence
 ```
 
 ```{r}
+# drop columns which are not necessary anymore
+politicians <- subset(politicians, select = -c(Q_A_Link, No_of_Q_pages))
+
+```
+
+```{r}
 # export updated data
 politicians_json <- toJSON(politicians)
 
