@@ -106,6 +106,6 @@ for (i in page_num)  {
 
 ```{r}
 # export the politicians as csv
-# the path has to updated
+# the path has to be updated
 write.csv(politicians, "Your\\file\\path\\politicians_1.csv", row.names = FALSE)
 ```
