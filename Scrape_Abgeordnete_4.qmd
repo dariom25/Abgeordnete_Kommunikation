@@ -12,10 +12,9 @@ This script uses api-calls to get information about gender, residence, first nam
 # load libraries
 library(rvest)
 library(jsonlite)
-library(httr)
 
 # load data
-politicians <- fromJSON("C:\\Users\\shado\\Documents\\Abgeordnete_Kommunikation\\abgeordnetenwatch_data - Kopie.json")
+politicians <- fromJSON("abgeordnetenwatch_data.json")
 ```
 
 ```{r}
