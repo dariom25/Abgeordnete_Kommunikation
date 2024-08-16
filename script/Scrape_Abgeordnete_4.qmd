@@ -12,6 +12,7 @@ This script uses api-calls to get information about gender, residence, first nam
 # load libraries
 library(rvest)
 library(jsonlite)
+library(tidyverse)
 
 # load data
 politicians <- fromJSON("abgeordnetenwatch_data.json")
@@ -63,10 +64,17 @@ politicians$Year_of_birth <- year_of_birth
 politicians$Residence <- residence
 ```
 
+## Data cleaning
+
 ```{r}
 # drop columns which are not necessary anymore
 politicians <- subset(politicians, select = -c(Q_A_Link, No_of_Q_pages))
+```
 
+```{r}
+# transform date variable from string to date object
+politicians$QA_Information <- map(politicians$QA_Information, ~ map(
+  .x, ~ mutate(.x, Date.of.Question = as.Date(Date.of.Question, format = "%d.%m.%Y"))))
 ```
 
 ```{r}
